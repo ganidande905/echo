@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = "https://echogani.netlify.app/"
 languageCode = 'en-us'
 title = 'My New Hugo Site'
 [module]
@@ -34,6 +34,6 @@ url = "mailto:dandegani57@gmail.com"
   name = "Posts"
   url = "/posts/"
   weight = 2
-  
+
 [outputs]
 home = ["HTML", "RSS", "JSON"]
