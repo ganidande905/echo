@@ -1,109 +1,95 @@
-<!DOCTYPE html>
-<html lang="en" class="dark">
-  <head>
-    <meta charset="UTF-8">
-    <title>{{ .Title }}</title>
-  </head>
-  {{ partial "head.html" . }}
-  <body data-theme="dark" class="notransition">
-    {{ partial "scriptsBodyStart.html" . }}
-    {{ partial "header.html" . }}
+{{ define "main" }}
+  <style>
+    .wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    .bio {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .bio-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
+    .bio-name {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 1rem 0 0.3rem;
+    }
+    .bio-description {
+      color: #aaa;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
 
-    <style>
-      .wrapper {
-        max-width: 720px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-      }
-      .bio {
-        text-align: center;
-        margin-bottom: 2rem;
-      }
-      .bio-avatar {
-        width: 96px;
-        height: 96px;
-        border-radius: 50%;
-        object-fit: cover;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-      }
-      .bio-name {
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 1rem 0 0.3rem;
-      }
-      .bio-description {
-        color: #aaa;
-        font-size: 1rem;
-        line-height: 1.4;
-      }
+    .posts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+    .posts-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #333;
+      padding-bottom: 0.5rem;
+    }
+    .posts-title {
+      font-weight: 500;
+      color: var(--accent, #1e90ff);
+      text-decoration: none;
+    }
+    .posts-title:hover {
+      text-decoration: underline;
+    }
+    .posts-date {
+      font-size: 0.9rem;
+      color: #999;
+    }
 
-      .posts {
-        display: flex;
-        flex-direction: column;
-        gap: 0.8rem;
-        margin-top: 1.5rem;
-      }
-      .posts-row {
-        display: flex;
-        justify-content: space-between;
-        border-bottom: 1px solid #333;
-        padding-bottom: 0.5rem;
-      }
-      .posts-title {
-        font-weight: 500;
-        color: var(--accent, #1e90ff);
-        text-decoration: none;
-      }
-      .posts-title:hover {
-        text-decoration: underline;
-      }
-      .posts-date {
-        font-size: 0.9rem;
-        color: #999;
-      }
+    .see-all {
+      margin-top: 1.5rem;
+    }
+    .see-all a {
+      color: var(--accent, #1e90ff);
+      text-decoration: underline;
+      font-weight: 500;
+    }
+  </style>
 
-      .see-all {
-        margin-top: 1.5rem;
-      }
-      .see-all a {
-        color: var(--accent, #1e90ff);
-        text-decoration: underline;
-        font-weight: 500;
-      }
-    </style>
+  <div class="wrapper">
+    <section class="bio center">
+      <img src="/images/profile.jpg" alt="Profile Image" class="bio-avatar" />
+      <h1 class="bio-name">Gani Dande</h1>
+      <p class="bio-description">
+        Developer. Writer. Builder.  
+        Sharing thoughts, code, and projects that matter.
+      </p>
+    </section>
 
-    <div class="wrapper">
-      <section class="bio center">
-        <img src="/images/profile.jpg" alt="Profile Image" class="bio-avatar" />
-        <h1 class="bio-name">Gani Dande</h1>
-        <p class="bio-description">
-          Developer. Writer. Builder.  
-          Sharing thoughts, code, and projects that matter.
-        </p>
-      </section>
-
-      <main aria-label="Content">
-        <h3 class="posts-item-note">Recent Posts</h3>
-        <div class="posts">
-          {{ $pagesToShow := where .Site.RegularPages "Type" "in" site.Params.mainSections }}
-          {{ $posts := $pagesToShow.ByDate.Reverse }}
-          {{ range first 5 $posts }}
-            <div class="posts-row">
-              <a class="posts-title" href="{{ .Permalink }}">{{ .Title }}</a>
-              <span class="posts-date">{{ .Date.Format "Jan 2, 2006" }}</span>
-            </div>
-          {{ end }}
-        </div>
-
-        {{ if gt (len $posts) 5 }}
-          <div class="see-all">
-            <a href="/posts">See all posts</a>
+    <main aria-label="Content">
+      <h3 class="posts-item-note">Recent Posts</h3>
+      <div class="posts">
+        {{ $pagesToShow := where .Site.RegularPages "Type" "in" site.Params.mainSections }}
+        {{ $posts := $pagesToShow.ByDate.Reverse }}
+        {{ range first 5 $posts }}
+          <div class="posts-row">
+            <a class="posts-title" href="{{ .Permalink }}">{{ .Title }}</a>
+            <span class="posts-date">{{ .Date.Format "Jan 2, 2006" }}</span>
           </div>
         {{ end }}
-      </main>
-    </div>
+      </div>
 
-    {{ partial "footer.html" . }}
-    {{ partial "scriptsBodyEnd.html" . }}
-  </body>
-</html>
+      {{ if gt (len $posts) 5 }}
+        <div class="see-all">
+          <a href="/posts">See all posts</a>
+        </div>
+      {{ end }}
+    </main>
+  </div>
+{{ end }}
