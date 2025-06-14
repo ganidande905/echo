@@ -1,0 +1,39 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'My New Hugo Site'
+[module]
+  [[module.imports]]
+    path = "github.com/hugo-sid/hugo-blog-awesome"
+
+[[params.socialIcons]]
+name = "github"
+url = "https://github.com/ganidande905"
+
+[[params.socialIcons]]
+name = "linkedin"
+url = "https://www.linkedin.com/in/ganeswaradande"
+
+[[params.socialIcons]]
+name = "mail"
+url = "mailto:dandegani57@gmail.com"
+[params]
+  goToTop = true
+  mainSections = ["posts"]
+  defaultColor = "auto"
+
+[menu]
+
+  [[menu.main]]
+  identifier = "home"
+  name = "Home"
+  url = "/"
+  weight = 1
+
+  [[menu.main]]
+  identifier = "posts"
+  name = "Posts"
+  url = "/posts/"
+  weight = 2
+  
+[outputs]
+home = ["HTML", "RSS", "JSON"]

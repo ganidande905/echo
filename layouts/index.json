@@ -1,0 +1,13 @@
+{{- with .Site.RegularPages }}
+[
+{{- range $i, $page := . }}
+  {{- if $i }},{{ end }}
+  {
+    "title": {{ .Params.title | jsonify }},
+    "date": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
+    "summary": {{ .Params.short_summary | jsonify }},
+    "permalink": "{{ .Permalink }}"
+  }
+{{- end }}
+]
+{{- end }}
