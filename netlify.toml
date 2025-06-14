@@ -1,0 +1,7 @@
+[build]
+  publish = "public"
+  command = "hugo --gc --minify"
+
+[context.production.environment]
+  HUGO_VERSION = "0.121.2"  # or match your local version
+  GO_VERSION = "1.20"       # enable Go for Hugo Modules
