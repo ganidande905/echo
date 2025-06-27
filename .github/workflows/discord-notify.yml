@@ -1,0 +1,89 @@
+name: Discord Notifications
+
+on:
+  push:
+    branches: 
+      - main
+      - testing
+  pull_request:
+    types: [opened, closed]
+    branches: 
+      - main
+      - testing
+  create:
+  delete:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Send Discord Notification
+        env:
+          PERSONAL_WEBHOOK: ${{ secrets.PERSONAL }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_EVENT_ACTION: ${{ github.event.action }}
+          GITHUB_PR_TITLE: ${{ github.event.pull_request.title }}
+          GITHUB_PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          GITHUB_REF_TYPE: ${{ github.event.ref_type }}
+          GITHUB_REF: ${{ github.event.ref }}
+          GITHUB_COMMIT_MSG: ${{ github.event.head_commit.message }}
+        run: |
+          echo "Preparing Discord message..."
+
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            COMMIT_MSG="${GITHUB_COMMIT_MSG}"
+            COMMIT_URL="https://github.com/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
+
+            printf '%s\n' \
+              '{' \
+              '  "embeds": [{' \
+              '    "title": "📦 New Push to '"${GITHUB_REPOSITORY}"'",' \
+              '    "description": "__**Author:**__ '"${GITHUB_ACTOR}"'\n__**Message:**__ '"${COMMIT_MSG}"'\n[🔗 View Commit]('"${COMMIT_URL}"')",' \
+              '    "color": 5763719' \
+              '  }]' \
+              '}' > payload.json
+
+          elif [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            COLOR=3066993
+            [[ "$GITHUB_EVENT_ACTION" == "closed" ]] && COLOR=15158332
+
+            printf '%s\n' \
+              '{' \
+              '  "embeds": [{' \
+              '    "title": "🔃 Pull Request '"${GITHUB_EVENT_ACTION^}"' in '"${GITHUB_REPOSITORY}"'",' \
+              '    "description": "**Title:** '"${GITHUB_PR_TITLE}"'\n**Author:** '"${GITHUB_PR_AUTHOR}"'\n[🔗 View PR]('"${GITHUB_PR_URL}"')",' \
+              '    "color": '"${COLOR}" \
+              '  }]' \
+              '}' > payload.json
+
+          elif [[ "$GITHUB_EVENT_NAME" == "create" ]]; then
+            printf '%s\n' \
+              '{' \
+              '  "embeds": [{' \
+              '    "title": "🌱 New '"${GITHUB_REF_TYPE^}"' Created",' \
+              '    "description": "**Repository:** '"${GITHUB_REPOSITORY}"'\n**Name:** '"${GITHUB_REF}"'\n**By:** '"${GITHUB_ACTOR}"'",' \
+              '    "color": 15844367' \
+              '  }]' \
+              '}' > payload.json
+
+          elif [[ "$GITHUB_EVENT_NAME" == "delete" ]]; then
+            printf '%s\n' \
+              '{' \
+              '  "embeds": [{' \
+              '    "title": "🗑️ '"${GITHUB_REF_TYPE^}"' Deleted",' \
+              '    "description": "**Repository:** '"${GITHUB_REPOSITORY}"'\n**Name:** '"${GITHUB_REF}"'\n**By:** '"${GITHUB_ACTOR}"'",' \
+              '    "color": 15158332' \
+              '  }]' \
+              '}' > payload.json
+          fi
+
+          echo "Sending to Discord..."
+          cat payload.json
+          curl -X POST -H "Content-Type: application/json" -d @payload.json "$PERSONAL_WEBHOOK"
