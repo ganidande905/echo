@@ -13,7 +13,7 @@ There was a time when I genuinely believed complexity meant intelligence. If som
 
 Today, I chase clarity. I value structure. I admire restraint. And that shift has quietly transformed how I see not only my work, but myself.
 
-The First Version of Cool
+### The First Version of Cool
 
 When I first started building things, I wanted everything to look impressive. I wanted motion everywhere. I wanted bold colors. I wanted complex layouts. I wanted to integrate as many technologies as possible so that nobody could question my capability. The longer the stack, the stronger I felt. The heavier the project, the more legitimate it seemed.
 
@@ -93,7 +93,7 @@ Earlier, I measured progress by visible output. How many projects. How many feat
 
 This shift happens quietly. You do not notice it day to day. But one day you open an old project and feel a strange detachment. That is not regression. It is refinement.
 
-The Loneliness of Higher Standards
+### The Loneliness of Higher Standards
 
 There is also an uncomfortable side to this evolution. When your standards rise, your tolerance for shallow work drops. Certain conversations feel repetitive. Certain shortcuts feel unacceptable. Certain hype cycles feel empty.
 
